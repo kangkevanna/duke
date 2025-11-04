@@ -1,26 +1,24 @@
 public class Task {
     protected String description;
     protected boolean isDone;
+    protected TaskType type;
 
-    public Task(String description) {
+    public Task(TaskType type, String description) {
+        this.type = type;
         this.description = description;
         this.isDone = false;
-    }
-
-    public void markAsDone() {
-        isDone = true;
-    }
-
-    public void markAsNotDone() {
-        isDone = false;
     }
 
     public String getStatusIcon() {
         return (isDone ? "X" : " ");
     }
 
-    @Override
     public String toString() {
-        return "[" + getStatusIcon() + "] " + description;
+        String typeLabel = switch (type) {
+            case TODO -> "[T]";
+            case DEADLINE -> "[D]";
+            case EVENT -> "[E]";
+        };
+        return typeLabel + "[" + getStatusIcon() + "] " + description;
     }
 }
