@@ -1,0 +1,32 @@
+package kev.task;
+
+public abstract class Task {
+    protected String description;
+    protected boolean isDone;
+    protected TaskType type;
+
+    public Task(TaskType type, String description) {
+        this.type = type;
+        this.description = description;
+        this.isDone = false;
+    }
+
+    public void markAsDone() {
+        this.isDone = true;
+    }
+
+    public void markAsNotDone() {
+        this.isDone = false;
+    }
+
+    public String getStatusIcon() {
+        return isDone ? "X" : " ";
+    }
+
+    @Override
+    public String toString() {
+        return "[" + getStatusIcon() + "] " + description;
+    }
+
+    public abstract String toFileString();
+}

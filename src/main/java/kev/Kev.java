@@ -1,10 +1,19 @@
+package kev;
+
+import kev.task.*;
+import kev.exception.*;
+import kev.storage.Storage;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Kev {
+    private static final String DATA_PATH = "./data/duke.txt";
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        ArrayList<Task> tasks = new ArrayList<>();
+        Storage storage = new Storage();
+        ArrayList<Task> tasks = storage.loadTasks(); // Load tasks on startup
 
         System.out.println("____________________________________________________________");
         System.out.println(" Hello! I'm Kev");
@@ -39,6 +48,7 @@ public class Kev {
                     int idx = Integer.parseInt(input.split(" ")[1]) - 1;
                     if (idx >= 0 && idx < tasks.size()) {
                         tasks.get(idx).markAsDone();
+                        storage.saveTasks(tasks);
                         System.out.println("    ____________________________________________________________");
                         System.out.println("     Nice! I've marked this task as done:");
                         System.out.println("       " + tasks.get(idx));
@@ -52,6 +62,7 @@ public class Kev {
                     int idx = Integer.parseInt(input.split(" ")[1]) - 1;
                     if (idx >= 0 && idx < tasks.size()) {
                         tasks.get(idx).markAsNotDone();
+                        storage.saveTasks(tasks);
                         System.out.println("    ____________________________________________________________");
                         System.out.println("     OK, I've marked this task as not done yet:");
                         System.out.println("       " + tasks.get(idx));
@@ -65,6 +76,7 @@ public class Kev {
                     int idx = Integer.parseInt(input.split(" ")[1]) - 1;
                     if (idx >= 0 && idx < tasks.size()) {
                         Task removed = tasks.remove(idx);
+                        storage.saveTasks(tasks);
                         System.out.println("    ____________________________________________________________");
                         System.out.println("     Noted. I've removed this task:");
                         System.out.println("       " + removed);
@@ -81,6 +93,7 @@ public class Kev {
                         throw new KevException("OOPS!!! The description of a todo cannot be empty.");
                     }
                     tasks.add(new Todo(desc));
+                    storage.saveTasks(tasks);
                     System.out.println("    ____________________________________________________________");
                     System.out.println("     Got it. I've added this task:");
                     System.out.println("       " + tasks.get(tasks.size() - 1));
@@ -99,6 +112,7 @@ public class Kev {
                         throw new KevException("OOPS!!! The description or /by field of a deadline cannot be empty.");
                     }
                     tasks.add(new Deadline(desc, by));
+                    storage.saveTasks(tasks);
                     System.out.println("    ____________________________________________________________");
                     System.out.println("     Got it. I've added this task:");
                     System.out.println("       " + tasks.get(tasks.size() - 1));
@@ -118,6 +132,7 @@ public class Kev {
                         throw new KevException("OOPS!!! Description, /from, or /to field cannot be empty.");
                     }
                     tasks.add(new Event(desc, from, to));
+                    storage.saveTasks(tasks);
                     System.out.println("    ____________________________________________________________");
                     System.out.println("     Got it. I've added this task:");
                     System.out.println("       " + tasks.get(tasks.size() - 1));
