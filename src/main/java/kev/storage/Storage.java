@@ -5,92 +5,69 @@ import kev.exception.KevException;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Storage {
 
-    private static final String DATA_FOLDER = "./data";
-    private static final String FILE_PATH = DATA_FOLDER + "/duke.txt";
+    private String filePath;
 
-    public Storage() {
-        // Ensure folder exists
-        File folder = new File(DATA_FOLDER);
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-        // Ensure file exists
-        File file = new File(FILE_PATH);
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-        } catch (IOException e) {
-            System.out.println("Error creating data file: " + e.getMessage());
-        }
+    public Storage(String filePath) {
+        this.filePath = filePath;
     }
 
-    /**
-     * Load tasks from the file into an ArrayList<Task>.
-     */
-    public ArrayList<Task> loadTasks() {
+    public ArrayList<Task> loadTasks() throws KevException {
         ArrayList<Task> tasks = new ArrayList<>();
+        File file = new File(filePath);
 
-        try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            return tasks;
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
-                if (line.isBlank()) continue; // skip empty lines
                 String[] parts = line.split(" \\| ");
+                String type = parts[0];
+                boolean isDone = parts[1].equals("1");
+                String desc = parts[2];
 
-                if (parts.length < 3) continue; // skip malformed lines
-
-                String type = parts[0].trim();
-                boolean isDone = parts[1].trim().equals("1");
-                String description = parts[2].trim();
-
-                Task task = null;
                 switch (type) {
                     case "T":
-                        task = new Todo(description);
+                        Task todo = new Todo(desc);
+                        if (isDone) todo.markAsDone();
+                        tasks.add(todo);
                         break;
                     case "D":
-                        if (parts.length < 4) continue;
-                        String by = parts[3].trim();
-                        task = new Deadline(description, by);
+                        if (parts.length < 4) throw new KevException("Invalid file format for deadline");
+                        Task deadline = new Deadline(desc, parts[3]);
+                        if (isDone) deadline.markAsDone();
+                        tasks.add(deadline);
                         break;
                     case "E":
-                        if (parts.length < 4) continue;
-                        String at = parts[3].trim();
-                        String[] times = at.split("-");
-                        String from = times[0].trim();
-                        String to = times.length > 1 ? times[1].trim() : "";
-                        task = new Event(description, from, to);
+                        if (parts.length < 4) throw new KevException("Invalid file format for event");
+                        Task event = new Event(desc, parts[3]);
+                        if (isDone) event.markAsDone();
+                        tasks.add(event);
                         break;
                     default:
-                        continue; // unknown type
+                        throw new KevException("Unknown task type in file");
                 }
-
-                if (isDone) {
-                    task.markAsDone();
-                }
-
-                tasks.add(task);
             }
         } catch (IOException e) {
-            System.out.println("Error reading file: " + e.getMessage());
+            throw new KevException("Failed to read file: " + e.getMessage());
         }
 
         return tasks;
     }
 
-    /**
-     * Save tasks to the file.
-     */
-    public void saveTasks(ArrayList<Task> tasks) {
-        try (FileWriter fw = new FileWriter(FILE_PATH)) {
+    public void saveTasks(List<Task> tasks) throws IOException {
+        File file = new File(filePath);
+        file.getParentFile().mkdirs();
+        try (FileWriter fw = new FileWriter(file)) {
             for (Task task : tasks) {
                 fw.write(task.toFileString() + System.lineSeparator());
             }
-        } catch (IOException e) {
-            System.out.println("Error saving tasks: " + e.getMessage());
         }
     }
 }

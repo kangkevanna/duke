@@ -1,20 +1,8 @@
 package kev.task;
 
 public class Deadline extends Task {
-    protected String by;
-
-    public Deadline(String description, String by) {
-        super(TaskType.DEADLINE, description);
-        this.by = by;
-    }
-
-    @Override
-    public String toString() {
-        return "[D]" + super.toString() + " (by: " + by + ")";
-    }
-
-    @Override
-    public String toFileString() {
-        return "D | " + (isDone ? "1" : "0") + " | " + description + " | " + by;
-    }
+    private String by;
+    public Deadline(String description, String by) { super(description); this.by = by; }
+    public String toFileString() { return "D | " + (isDone ? "1" : "0") + " | " + description + " | " + by; }
+    public String toString() { return "[D][" + getStatusIcon() + "] " + description + " (by: " + by + ")"; }
 }

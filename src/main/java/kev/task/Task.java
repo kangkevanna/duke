@@ -3,30 +3,14 @@ package kev.task;
 public abstract class Task {
     protected String description;
     protected boolean isDone;
-    protected TaskType type;
 
-    public Task(TaskType type, String description) {
-        this.type = type;
-        this.description = description;
-        this.isDone = false;
-    }
+    public Task(String description) { this.description = description; this.isDone = false; }
 
-    public void markAsDone() {
-        this.isDone = true;
-    }
+    public void markAsDone() { isDone = true; }
+    public void markAsNotDone() { isDone = false; }
 
-    public void markAsNotDone() {
-        this.isDone = false;
-    }
-
-    public String getStatusIcon() {
-        return isDone ? "X" : " ";
-    }
-
-    @Override
-    public String toString() {
-        return "[" + getStatusIcon() + "] " + description;
-    }
+    public String getStatusIcon() { return (isDone ? "X" : " "); }
 
     public abstract String toFileString();
+    public abstract String toString();
 }
