@@ -57,10 +57,14 @@ public class Parser {
                 }
                 return new AddCommand(input);
 
+            case "on":
+                if (words.length < 2 || words[1].trim().isEmpty())
+                    throw new KevException("Please provide a date: on YYYY-MM-DD");
+                return new OnCommand(words[1].trim());
+
             default:
                 throw new KevException("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
         }
     }
 }
-
 

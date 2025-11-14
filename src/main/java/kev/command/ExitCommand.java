@@ -16,4 +16,3 @@ public class ExitCommand extends Command {
         return true;
     }
 }
-

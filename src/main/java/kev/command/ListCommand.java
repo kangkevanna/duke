@@ -21,4 +21,3 @@ public class ListCommand extends Command {
         ui.showLine();
     }
 }
-

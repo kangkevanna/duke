@@ -50,8 +50,7 @@ public class Storage {
                         if (isDone) event.markAsDone();
                         tasks.add(event);
                         break;
-                    default:
-                        throw new KevException("Unknown task type in file");
+
                 }
             }
         } catch (IOException e) {
