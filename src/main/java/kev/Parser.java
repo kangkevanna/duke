@@ -3,8 +3,19 @@ package kev;
 import kev.command.*;
 import kev.exception.KevException;
 
+/**
+ * responsible for parsing user input into executable commands.
+ */
 public class Parser {
 
+    /**
+     * parses the user input and returns the corresponding command.
+     * throws an exception if the input is invalid or incomplete.
+     *
+     * @param input The raw user input string.
+     * @return The corresponding Command object.
+     * @throws KevException If the input is invalid or unrecognized.
+     */
     public static Command parse(String input) throws KevException {
         String[] words = input.split(" ", 2);
         String command = words[0];

@@ -5,8 +5,16 @@ import kev.ui.Ui;
 import kev.storage.Storage;
 import kev.exception.KevException;
 
+/**
+ * command to handle the listing/display of all existing tasks stored in the tasklist.
+ */
 public class ListCommand extends Command {
 
+    /**
+     * lists/displays all tasks in the tasklist.
+     *
+     * @throws KevException not used here but required by method signature.
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws KevException {
         ui.showLine();

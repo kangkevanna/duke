@@ -8,13 +8,27 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
+/**
+ * command to list tasks occuring on a specific date.
+ * Deadline (by) and Event (at) tasks.
+ */
 public class OnCommand extends Command {
     private String dateStr;
 
+    /**
+     * creates OnCommand with the user-provided date string.
+     *
+     * @param dateStr A date in YYYY-MM-DD format.
+     */
     public OnCommand(String dateStr) {
         this.dateStr = dateStr;
     }
 
+    /**
+     * parses the date, filters for matching tasks within tasklist, and prints them.
+     *
+     * @throws KevException If the date format is invalid.
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws KevException {
         try {

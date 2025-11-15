@@ -8,13 +8,29 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
+/**
+ * command to handle tasks added (todo, deadline, event) to the task list.
+ */
 public class AddCommand extends Command {
     private String input;
 
+    /**
+     * creates an AddCommand with the user input.
+     * @param input the raw input string for the task command
+     */
     public AddCommand(String input) {
         this.input = input;
     }
 
+    /**
+     * executes the add command: parses the input, creates the task,
+     * adds it to the task list, displays confirmation, and saves to storage.
+     *
+     * @param tasks Task list to add the task to
+     * @param ui UI for user interaction
+     * @param storage Storage to save tasks
+     * @throws KevException if input is invalid or saving fails
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws KevException {
         String[] parts = input.split(" ", 2);

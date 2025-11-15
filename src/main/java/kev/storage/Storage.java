@@ -7,14 +7,29 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * storage component of the application that handles loading and saving tasks.
+ */
 public class Storage {
 
     private String filePath;
 
+    /**
+     * creates a Storage instance for loading and saving tasks from a specified file.
+     *
+     * @param filePath The path of the file to load/save tasks.
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
 
+    /**
+     * loads the tasks from the specified file.
+     * if the file does not exist, an empty list is returned.
+     *
+     * @return A list of tasks loaded from the file.
+     * @throws KevException If there is an error while reading the file.
+     * */
     public ArrayList<Task> loadTasks() throws KevException {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
@@ -60,9 +75,17 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * saves the list of tasks to the specified file.
+     *
+     * @param tasks The list of tasks to save.
+     * @throws IOException If there is an error while saving the tasks.
+     */
     public void saveTasks(List<Task> tasks) throws IOException {
         File file = new File(filePath);
-        file.getParentFile().mkdirs();
+        if (file.getParentFile() != null) {
+            file.getParentFile().mkdirs();
+        }
         try (FileWriter fw = new FileWriter(file)) {
             for (Task task : tasks) {
                 fw.write(task.toFileString() + System.lineSeparator());
