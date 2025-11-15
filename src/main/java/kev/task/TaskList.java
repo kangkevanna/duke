@@ -2,6 +2,9 @@ package kev.task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * a list of tasks and the operations
@@ -103,6 +106,29 @@ public class TaskList {
         return getAllTasks();
     }
 
+    /**
+     * Returns tasks that are due today or tomorrow.
+     *
+     * @return List of upcoming tasks
+     */
+    /**
+     * Returns a list of tasks that are due today or tomorrow.
+     *
+     * @return List of upcoming tasks.
+     */
+    public List<Task> getUpcomingTasks() {
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = today.plusDays(1);
+
+        return tasks.stream()
+                .filter(task -> task instanceof Deadline)
+                .map(task -> (Deadline) task)
+                .filter(deadline -> {
+                    LocalDate dueDate = deadline.getBy();
+                    return dueDate.equals(today) || dueDate.equals(tomorrow);
+                })
+                .collect(Collectors.toList());
+    }
     /**
      * prints all tasks to standard output.
      * (only used internally for debugging.)
