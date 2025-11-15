@@ -47,15 +47,41 @@ public class Kev {
         while (!isExit) {
             try {
                 String fullCommand = ui.readCommand();
+                assert fullCommand != null && !fullCommand.isBlank() : "User input should not be null or empty";
+
                 ui.showLine();
                 Command c = Parser.parse(fullCommand);
+                assert c != null : "Parsed command should not be null";
+
                 c.execute(tasks, ui, storage);
                 isExit = c.isExit();
+                assert !isExit || c.isExit() : "isExit flag should be consistent";
             } catch (KevException e) {
                 ui.showError(e.getMessage());
             } finally {
                 ui.showLine();
             }
+        }
+    }
+
+    /**
+     * processes a user input command and returns Kev's response as a string.
+     * used for GUI integration.
+     *
+     * @param input the user input
+     * @return the response message from Kev
+     */
+    public String getResponse(String input) {
+        assert input != null : "Input should not be null";
+        try {
+            Command command = Parser.parse(input);
+            assert command != null : "Parser returned null command";
+
+            command.execute(tasks, ui, storage);
+            assert ui.getLastOutput() != null : "UI last output should not be null after command execution";
+            return ui.getLastOutput();
+        } catch (KevException e) {
+            return "☹ OOPS!!! " + e.getMessage();
         }
     }
 
