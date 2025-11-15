@@ -73,6 +73,26 @@ public class Parser {
                     throw new KevException("Please provide a date: on YYYY-MM-DD");
                 return new OnCommand(words[1].trim());
 
+            case "snooze":
+                if (words.length < 2 || words[1].trim().isEmpty()) {
+                    throw new KevException("Please provide task number and new date: snooze <num> YYYY-MM-DD");
+                }
+                String[] args = words[1].split(" ", 2);
+                if (args.length < 2) throw new KevException("Provide both task number and new date.");
+                int snoozeIndex;
+                try {
+                    snoozeIndex = Integer.parseInt(args[0]) - 1;
+                } catch (NumberFormatException e) {
+                    throw new KevException("Task number must be an integer.");
+                }
+                return new SnoozeCommand(snoozeIndex, args[1].trim());
+
+            case "find":
+                if (words.length < 2 || words[1].trim().isEmpty()) {
+                    throw new KevException("☹ OOPS!!! You must provide a keyword to find.");
+                }
+                return new FindCommand(words[1].trim());
+
             default:
                 throw new KevException("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
         }

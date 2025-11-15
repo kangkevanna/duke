@@ -31,6 +31,11 @@ public class Event extends Task {
         return at;
     }
 
+    /** sets/updates task with new date for deadline. */
+    public void setAt(LocalDate at) {
+        this.at = at;
+    }
+
     /**
      * converts the event into a savable string format for file storage.
      *

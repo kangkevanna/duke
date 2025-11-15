@@ -32,6 +32,11 @@ public class Deadline extends Task {
         return by;
     }
 
+    /** sets/updates task with new date for deadline.*/
+    public void setBy(LocalDate by) {
+        this.by = by;
+    }
+
     /**
      * converts the deadline into a savable string format for file storage.
      *
