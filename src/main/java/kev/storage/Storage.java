@@ -61,7 +61,13 @@ public class Storage {
                         break;
                     case "E":
                         if (parts.length < 4) throw new KevException("Invalid file format for event");
-                        Task event = new Event(desc, parts[3]);
+
+                        String[] dateTimes = parts[3].split(" "); // ["2025-11-16","14:00","2025-11-16","16:00"]
+                        if (dateTimes.length != 4) throw new KevException("Invalid date/time format for event");
+                        Task event = new Event(desc,
+                                dateTimes[0], dateTimes[1], // start date/time
+                                dateTimes[2], dateTimes[3]  // end date/time
+                        );
                         if (isDone) event.markAsDone();
                         tasks.add(event);
                         break;

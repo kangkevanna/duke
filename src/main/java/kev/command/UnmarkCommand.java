@@ -29,7 +29,8 @@ public class UnmarkCommand extends Command {
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws KevException {
         if (index < 0 || index >= tasks.size()) {
-            throw new KevException("☹ OOPS!!! The task number is invalid.");
+            throw new KevException("Please review tasklist and provide a valid task index." +
+                    "Use command list to view tasklist.");
         }
 
         Task task = tasks.get(index);

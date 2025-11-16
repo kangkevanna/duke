@@ -13,11 +13,12 @@ public class Ui {
     private Scanner sc;
 
     /** stores the last output message for GUI display. */
-    private String lastOutput;
+    private StringBuilder lastOutput;
 
     /** creates a new UI object and initializes the input scanner. */
     public Ui() {
         sc = new Scanner(System.in);
+        lastOutput = new StringBuilder();
     }
 
     /**
@@ -33,7 +34,8 @@ public class Ui {
 
     /** displays the welcome message shown when the program starts. */
     public void showWelcome() {
-        lastOutput = "Hello! I'm Kev\nWhat can I do for you?";
+        lastOutput.setLength(0);
+        lastOutput.append("Hello! I'm Kev\nWhat can I do for you?");
         System.out.println(lastOutput);
     }
 
@@ -49,7 +51,7 @@ public class Ui {
      */
     public void showMessage(String message) {
         assert message != null : "Message to show should not be null";
-        lastOutput = message;
+        lastOutput.append(message).append("\n");
         System.out.println(" " + message);
     }
 
@@ -66,8 +68,8 @@ public class Ui {
      */
     public void showTaskAdded(Task task, int size) {
         assert task != null : "Task to add should not be null";
-        lastOutput = "Noted. I've added this task:\n  " + task + "\nNow you have " + size + " tasks in the list.";
-        System.out.println(" " + lastOutput);
+        String msg = "Got you! I've added this task:\n  " + task + "\nNow you have " + size + " tasks in the list.";
+        showMessage(msg);
     }
 
     /**
@@ -78,8 +80,8 @@ public class Ui {
      */
     public void showTaskDeleted(Task task, int size) {
         assert task != null : "Task to delete should not be null";
-        lastOutput = "Noted. I've removed this task:\n  " + task + "\nNow you have " + size + " tasks in the list.";
-        System.out.println(" " + lastOutput);
+        String msg = "Sure thing! I've removed this task:\n  " + task + "\nNow you have " + size + " tasks in the list.";
+        showMessage(msg);
     }
 
     /**
@@ -89,8 +91,7 @@ public class Ui {
      */
     public void showTaskMarked(Task task) {
         assert task != null : "Task to mark should not be null";
-        lastOutput = "Nice! I've marked this task as done:\n  " + task;
-        System.out.println(" " + lastOutput);
+        showMessage("OK, I've marked this task as done:\n  " + task);
     }
 
     /**
@@ -100,8 +101,7 @@ public class Ui {
      */
     public void showTaskUnmarked(Task task) {
         assert task != null : "Task to unmark should not be null";
-        lastOutput = "OK, I've marked this task as not done yet:\n  " + task;
-        System.out.println(" " + lastOutput);
+        showMessage("OK, I've marked this task as not done yet:\n  " + task);
     }
 
     /**
@@ -111,8 +111,7 @@ public class Ui {
      */
     public void showError(String message) {
         assert message != null : "Error message should not be null";
-        lastOutput = "☹ OOPS!!! " + message;
-        System.out.println(" " + lastOutput);
+        showMessage(message);
     }
 
     /**
@@ -122,7 +121,14 @@ public class Ui {
      * @return last output message
      */
     public String getLastOutput() {
-        return lastOutput;
+            return lastOutput.toString().trim();
+    }
+
+    /**
+     * clears the last output before executing new command.
+     */
+    public void clearLastOutput() {
+        lastOutput.setLength(0);
     }
 }
 

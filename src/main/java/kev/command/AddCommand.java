@@ -51,6 +51,12 @@ public class AddCommand extends Command {
                     throw new KevException("Deadline must have a date: /by YYYY-MM-DD");
                 try {
                     LocalDate by = LocalDate.parse(deadlineParts[1].trim());
+
+                    // to check deadline input to ensure date is valid
+                    if (by.isBefore(LocalDate.now())) {
+                        throw new KevException("Deadline cannot be in the past!");
+                    }
+
                     task = new Deadline(deadlineParts[0].trim(), by.toString());
                 } catch (DateTimeParseException e) {
                     throw new KevException("Invalid date format! Use YYYY-MM-DD");
@@ -60,12 +66,24 @@ public class AddCommand extends Command {
             case "event":
                 String[] eventParts = description.split(" /at ");
                 if (eventParts.length != 2)
-                    throw new KevException("Event must have a date: /at YYYY-MM-DD");
+                    throw new KevException("Event must have a start and end: /at YYYY-MM-DD HH:mm to YYYY-MM-DD HH:mm");
                 try {
-                    LocalDate at = LocalDate.parse(eventParts[1].trim());
-                    task = new Event(eventParts[0].trim(), at.toString());
-                } catch (DateTimeParseException e) {
-                    throw new KevException("Invalid date format! Use YYYY-MM-DD");
+                    String[] range = eventParts[1].split(" to ");
+                    if (range.length == 1) {
+                        String[] timeParts = range[0].split(" ");
+                        task = new Event(eventParts[0].trim(), timeParts[0], timeParts[1].split("-")[0],
+                                timeParts[0], timeParts[1].split("-")[1]);
+                    } else {
+                        String[] startParts = range[0].split(" ");
+                        String[] endParts = range[1].split(" ");
+                        task = new Event(eventParts[0].trim(), startParts[0], startParts[1],
+                                endParts[0], endParts[1]);
+                    }
+                } catch (KevException e) {
+                    // preserve the specific error
+                    throw e;
+                }catch (Exception e) {
+                    throw new KevException("Invalid event format! Use YYYY-MM-DD HH:mm[-HH:mm] or YYYY-MM-DD HH:mm to YYYY-MM-DD HH:mm");
                 }
                 break;
 

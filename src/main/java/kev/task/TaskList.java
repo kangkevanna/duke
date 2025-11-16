@@ -135,7 +135,7 @@ public class TaskList {
      */
     public void listTasks() {
         if (tasks.isEmpty()) {
-            System.out.println(" No tasks in your list!");
+            System.out.println(" YAY! You have no tasks in your list!");
             return;
         }
         for (int i = 0; i < tasks.size(); i++) {

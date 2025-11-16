@@ -14,7 +14,7 @@ public class ExitCommand extends Command {
      */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws KevException {
-        ui.showMessage("Bye. Hope to see you again soon!");
+        ui.showMessage("Bye :( Hope to see you again soon!");
     }
 
     /**

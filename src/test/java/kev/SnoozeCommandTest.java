@@ -53,13 +53,18 @@ public class SnoozeCommandTest {
      */
     @Test
     public void execute_snoozeEvent_taskDateUpdated() throws KevException, IOException {
-        Event event = new Event("Team meeting", "2025-11-22");
+        Event event = new Event(
+                "Team meeting",
+                "2025-11-22", "14:00",
+                "2025-11-22", "16:00"
+        );
         tasks.addTask(event);
 
-        SnoozeCommand snooze = new SnoozeCommand(0, "2025-11-28");
+        SnoozeCommand snooze = new SnoozeCommand(0, "2025-11-28 14:00 2025-11-28 16:00");
         snooze.execute(tasks, ui, storage);
 
-        assertEquals(LocalDate.parse("2025-11-28"), ((Event) tasks.get(0)).getAt());
+        assertEquals(LocalDate.parse("2025-11-28"), ((Event) tasks.get(0)).getStartDate());
+        assertEquals(LocalDate.parse("2025-11-28"), ((Event) tasks.get(0)).getEndDate());
     }
 
     /**

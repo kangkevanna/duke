@@ -51,14 +51,14 @@ class RemindCommandTest {
 
         String output = outContent.toString();
 
-        // Check output contains tasks due today and tomorrow
+        // check output contains tasks due today and tomorrow
         assertTrue(output.contains("Submit report"), "Output should include task due today");
         assertTrue(output.contains("Prepare slides"), "Output should include task due tomorrow");
 
-        // Check output does not include task not due soon
+        // check output does not include task not due soon
         assertFalse(output.contains("Future task"), "Output should not include task not due soon");
 
-        // RemindCommand should not exit
+        // remindCommand should not exit
         assertFalse(remindCommand.isExit());
     }
 

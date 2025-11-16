@@ -7,6 +7,7 @@ import kev.exception.KevException;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 
 /**
@@ -40,7 +41,7 @@ public class SnoozeCommand extends Command {
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws KevException {
         if (index < 0 || index >= tasks.size()) {
-            throw new KevException("☹ OOPS!!! The task number is invalid.");
+            throw new KevException("Please review tasklist and provide a valid task index.");
         }
 
         Task task = tasks.get(index);
@@ -55,9 +56,20 @@ public class SnoozeCommand extends Command {
             }
         } else if (task instanceof Event) {
             try {
-                LocalDate newDate = LocalDate.parse(newDateStr);
-                ((Event) task).setAt(newDate);
-                ui.showMessage("Task snoozed: " + task);
+                // Expected format: "startDate startTime endDate endTime"
+                String[] parts = newDateStr.split(" ");
+                if (parts.length != 4) throw new KevException(
+                        "Invalid event snooze format. Use: YYYY-MM-DD HH:mm YYYY-MM-DD HH:mm"
+                );
+
+                LocalDate newStartDate = LocalDate.parse(parts[0]);
+                LocalTime newStartTime = LocalTime.parse(parts[1]);
+                LocalDate newEndDate = LocalDate.parse(parts[2]);
+                LocalTime newEndTime = LocalTime.parse(parts[3]);
+
+                ((Event) task).reschedule(newStartDate, newStartTime, newEndDate, newEndTime);
+                ui.showMessage("Event snoozed: " + task);
+
             } catch (DateTimeParseException e) {
                 throw new KevException("Invalid date format! Use YYYY-MM-DD");
             }

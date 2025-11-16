@@ -65,6 +65,15 @@ public class Kev {
     }
 
     /**
+     * returns a welcome message for GUI version of Kev.
+     *
+     * @return the welcome message as a string
+     */
+    public String getWelcomeMessage() {
+        return "Hello! I'm Kev\nWhat can I do for you?";
+    }
+
+    /**
      * processes a user input command and returns Kev's response as a string.
      * used for GUI integration.
      *
@@ -74,6 +83,7 @@ public class Kev {
     public String getResponse(String input) {
         assert input != null : "Input should not be null";
         try {
+            ui.clearLastOutput();
             Command command = Parser.parse(input);
             assert command != null : "Parser returned null command";
 
@@ -81,7 +91,32 @@ public class Kev {
             assert ui.getLastOutput() != null : "UI last output should not be null after command execution";
             return ui.getLastOutput();
         } catch (KevException e) {
-            return "☹ OOPS!!! " + e.getMessage();
+            return e.getMessage();
+        }
+    }
+
+    /**
+     * returns the Ui instance.
+     * Needed for GUI operations like clearing last output.
+     *
+     * @return the Ui object
+     */
+    public Ui getUi() {
+        return ui;
+    }
+
+    /**
+     * checks if a given input is an exit command.
+     *
+     * @param input The user input
+     * @return true if it is an exit command, false otherwise
+     */
+    public boolean isExit(String input) {
+        try {
+            Command command = Parser.parse(input);
+            return command.isExit();
+        } catch (KevException e) {
+            return false;
         }
     }
 

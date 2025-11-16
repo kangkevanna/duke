@@ -35,15 +35,24 @@ public class OnCommand extends Command {
             LocalDate date = LocalDate.parse(dateStr);
             List<Task> all = tasks.getAllTasks();
             boolean found = false;
+
             for (Task t : all) {
-                if (t instanceof Deadline && ((Deadline) t).getBy().equals(date)) {
-                    ui.showMessage(t.toString());
-                    found = true;
-                } else if (t instanceof Event && ((Event) t).getAt().equals(date)) {
-                    ui.showMessage(t.toString());
-                    found = true;
+                if (t instanceof Deadline) {
+                    Deadline d = (Deadline) t;
+                    if (d.getBy().equals(date)) {
+                        ui.showMessage(d.toString());
+                        found = true;
+                    }
+                } else if (t instanceof Event) {
+                    Event e = (Event) t;
+                    // Check if date falls within event start-end range
+                    if (!date.isBefore(e.getStartDate()) && !date.isAfter(e.getEndDate())) {
+                        ui.showMessage(e.toString());
+                        found = true;
+                    }
                 }
             }
+
             if (!found) ui.showMessage("No tasks found on " + date);
         } catch (DateTimeParseException e) {
             throw new KevException("Invalid date format! Use YYYY-MM-DD");

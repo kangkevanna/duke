@@ -20,7 +20,7 @@ public class RemindCommand extends Command {
 
         ui.showLine();
         if (upcomingTasks.isEmpty()) {
-            ui.showMessage("No upcoming tasks for today or tomorrow!");
+            ui.showMessage("You're good! There are no tasks for today or tomorrow!");
         } else {
             ui.showMessage("Reminder! Upcoming deadlines:");
             for (int i = 0; i < upcomingTasks.size(); i++) {
